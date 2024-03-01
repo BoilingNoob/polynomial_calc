@@ -50,5 +50,12 @@ $points[0]
 
 $points = New-Object System.Collections.ArrayList
 #          =========================
-$enocde_string = (Get-Content -Path .\input_string.txt).trim()
-Write-Host $enocde_string, $enocde_string.Length
+$encode_string = (Get-Content -Path .\input_string.txt).trim()
+for ($i = 0; $i -lt $encode_string.length; $i++) {
+    $null = $points.Add((make_point_obj -x $i -y ([byte][char]($encode_string[$i]))))
+}
+
+
+#Write-Host $encode_string, $encode_string.Length
+
+$points | ft
