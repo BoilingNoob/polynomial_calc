@@ -18,20 +18,27 @@ $reped_text = replace_lagrange_text -lagrange_text $lagrange_text -points_list $
 function decode_polynomial() {
     param(
         $length = 0,
-        $expression = $null
+        $expression = $null,
+        [switch]$calc_length
     )
+
+    if ($calc_length) {
+        $length = ([regex]::Matches($expression, "\)\)\)")).count
+    }
     $resultant_text = ""
 
-    0..($length - 1) | ForEach-Object {
+    0..($length) | ForEach-Object {
         try {
             $resultant_text += [char]((evaluate_my_expression -expression $expression -x $_) -as [int])
         }
         catch {
-
+            Write-Host "issue with index $_"
         }
     }
+
+    return $resultant_text
 }
-$resultant_text = decode_polynomial -length 20 -expression $reped_text
+$resultant_text = decode_polynomial -expression $reped_text -calc_length
 Write-Host $resultant_text
 
 #$expression_result = evaluate_my_expression -expression $reped_text -x 4
