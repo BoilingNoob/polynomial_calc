@@ -1,4 +1,10 @@
-
+function make_point_obj() {
+    param(
+        $x = 0,
+        $y = 0
+    )
+    return [pscustomobject]@{x = $x; y = $y }
+}
 function parse_point() {
     param(
         $input_string = $null
@@ -122,7 +128,7 @@ function replace_lagrange_text() {
     for ($index = $points_list.count - 1; $index -ge 0; $index--) {
         $x_hunt = "X" + $index
         $y_hunt = "Y" + $index
-        Write-Host "replacing: $($x_hunt) & $($y_hunt)"
+        #Write-Host "replacing: $($x_hunt) & $($y_hunt)"
         $lagrange_text = $lagrange_text.Replace($x_hunt, $points_list[$index].x)
         $lagrange_text = $lagrange_text.replace($y_hunt, $points_list[$index].y)
     }
@@ -146,7 +152,7 @@ function evaluate_my_expression () {
     return $final_result
 
 }
-
+Export-ModuleMember -Function make_point_obj
 Export-ModuleMember -Function parse_point
 Export-ModuleMember -Function convert_string_to_points
 Export-ModuleMember -Function NOT_WORKING_lagrange_interpolation
