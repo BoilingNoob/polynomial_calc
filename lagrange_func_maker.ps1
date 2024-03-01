@@ -15,15 +15,23 @@ $reped_text = replace_lagrange_text -lagrange_text $lagrange_text -points_list $
 
 #Write-Host $reped_text
 
-$resultant_text = ""
-0..40 | % {
-    try {
-        $resultant_text += [char]((evaluate_my_expression -expression $reped_text -x $_) -as [int])
-    }
-    catch {
+function decode_polynomial() {
+    param(
+        $length = 0,
+        $expression = $null
+    )
+    $resultant_text = ""
 
+    0..($length - 1) | ForEach-Object {
+        try {
+            $resultant_text += [char]((evaluate_my_expression -expression $expression -x $_) -as [int])
+        }
+        catch {
+
+        }
     }
 }
+$resultant_text = decode_polynomial -length 20 -expression $reped_text
 Write-Host $resultant_text
 
 #$expression_result = evaluate_my_expression -expression $reped_text -x 4
