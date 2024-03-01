@@ -119,9 +119,12 @@ function replace_lagrange_text() {
         $points_list
     )
     
-    for ($index = 0; $index -lt $points_list.count; $index++) {
-        $lagrange_text = $lagrange_text.Replace("X$($index)", $points_list[$index].x)
-        $lagrange_text = $lagrange_text.Replace("Y$($index)", $points_list[$index].y)
+    for ($index = $points_list.count - 1; $index -ge 0; $index--) {
+        $x_hunt = "X" + $index
+        $y_hunt = "Y" + $index
+        Write-Host "replacing: $($x_hunt) & $($y_hunt)"
+        $lagrange_text = $lagrange_text.Replace($x_hunt, $points_list[$index].x)
+        $lagrange_text = $lagrange_text.replace($y_hunt, $points_list[$index].y)
     }
     return $lagrange_text
 }
