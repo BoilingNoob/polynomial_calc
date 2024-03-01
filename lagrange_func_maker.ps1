@@ -7,7 +7,7 @@ Import-Module ".\funcs.psm1" -Force
 $encode_string = (Get-Content -Path .\input_string.txt)
 $points = convert_string_to_points -encode_string $encode_string
 
-$points | Format-Table
+#$points | Format-Table
 
 $lagrange_text = make_lagrange_text -points_list $points
 
