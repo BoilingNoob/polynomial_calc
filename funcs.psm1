@@ -126,9 +126,27 @@ function replace_lagrange_text() {
     return $lagrange_text
 }
 
+function evaluate_my_expression () {
+    param(
+        $expression,
+        $x,
+        [switch]$dont_round
+    )
+
+    $result = $expression -replace "X", $x | Invoke-Expression
+    if ($dont_round) {
+        $final_result = $result
+    }
+    else {
+        $final_result = [math]::Round($result, 0)
+    }
+    return $final_result
+
+}
+
 Export-ModuleMember -Function parse_point
 Export-ModuleMember -Function convert_string_to_points
 Export-ModuleMember -Function NOT_WORKING_lagrange_interpolation
 Export-ModuleMember -Function make_lagrange_text
 Export-ModuleMember -Function replace_lagrange_text
-#Export-ModuleMember -Function convert_string_to_points
+Export-ModuleMember -Function evaluate_my_expression
