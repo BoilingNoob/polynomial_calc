@@ -62,7 +62,7 @@ function NOT_WORKING_lagrange_interpolation() {
 function make_lagrange_text() {
     param(
         $points_list = $null,
-
+        [switch]$evaluate_bottom
     )
     $text = ""
 
