@@ -15,12 +15,6 @@ $reped_text = replace_lagrange_text -lagrange_text $lagrange_text -points_list $
 
 #Write-Host $reped_text
 
-function decode_polynomial() {
-    param(
-        $length = 0,
-        $expression = $null,
-        [switch]$calc_length
-    )
 
     if ($calc_length) {
         $length = ([regex]::Matches($expression, "\)\)\)")).count
