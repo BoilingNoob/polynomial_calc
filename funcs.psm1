@@ -62,8 +62,12 @@ function NOT_WORKING_lagrange_interpolation() {
 function make_lagrange_text() {
     param(
         $points_list = $null,
-        [switch]$evaluate_bottom
+        [switch]$evaluate_bottom,
+        [switch]$evaluate_Y
     )
+    if ($evaluate_Y) {
+        $evaluate_bottom = $true
+    }
     $text = ""
 
     for ($index = 0; $index -lt $points_list.count; $index++) {
@@ -75,15 +79,32 @@ function make_lagrange_text() {
         }
         $top += ")"
 
-        $bottom = "/("
+        $bottom = ""
         for ($x_ind = 0; $x_ind -lt $points_list.Count; $x_ind++) {
             if ($x_ind -ne $index) {
                 $bottom += "(X$($index)-X$($x_ind))"
             }
         }
-        $bottom += "))"
+        if ($evaluate_bottom) {
+            #Write-Host "evaling bottom"
+            for ($sub_index = 0; $sub_index -lt $points_list.count; $sub_index++) {
+                $bottom = $bottom.Replace("X$($sub_index)", $points_list[$sub_index].x)
+            }
+            $bottom = $bottom.Replace(")(", ")*(")
+            $bottom = "" + ($bottom | Invoke-Expression)
+        }
+        
 
-        $text += ($top + $bottom) + "*Y$($index)"
+        if ($evaluate_Y) {
+            $text += $top + "*" + ($points_list[$index].y / $bottom) + ")"
+            #$text += ($top + $bottom) + "*Y$($index)"
+        }
+        else {
+            $bottom += "))"
+            $bottom = "/(" + $bottom
+            $text += ($top + $bottom) + "*Y$($index)"
+        }
+        
         if ($index -lt $points_list.count - 1) {
             $text += " + "
         }
