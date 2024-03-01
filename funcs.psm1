@@ -14,7 +14,6 @@ function convert_string_to_points() {
     )
     $encode_string = $encode_string.trim()
     $points = New-Object System.Collections.ArrayList
-    #          =========================
     
     for ($i = 0; $i -lt $encode_string.length; $i++) {
         $num_temp = [byte][char]($encode_string[$i])
@@ -23,8 +22,9 @@ function convert_string_to_points() {
         $null = $points.Add($point_temp)
     }  
     
-    $points_array = $points -as [array]
-    return $points_array
+    #$points_array = $points -as [array]
+    #return $points_array
+    return $points
 }
 
 
@@ -58,3 +58,56 @@ function NOT_WORKING_lagrange_interpolation() {
 
     return $calculated_value
 }
+
+function make_lagrange_text() {
+    param(
+        $points_list = $null,
+
+    )
+    $text = ""
+
+    for ($index = 0; $index -lt $points_list.count; $index++) {
+        $top = "(("
+        for ($x_ind = 0; $x_ind -lt $points_list.Count; $x_ind++) {
+            if ($x_ind -ne $index) {
+                $top += "(X-X$($x_ind))"
+            }
+        }
+        $top += ")"
+
+        $bottom = "/("
+        for ($x_ind = 0; $x_ind -lt $points_list.Count; $x_ind++) {
+            if ($x_ind -ne $index) {
+                $bottom += "(X$($index)-X$($x_ind))"
+            }
+        }
+        $bottom += "))"
+
+        $text += ($top + $bottom) + "*Y$($index)"
+        if ($index -lt $points_list.count - 1) {
+            $text += " + "
+        }
+    }
+    $text = $text.Replace(")(", ")*(")
+    return $text
+}
+
+function replace_lagrange_text() {
+    param(
+        $lagrange_text = $null,
+        $points_list
+    )
+    
+    for ($index = 0; $index -lt $points_list.count; $index++) {
+        $lagrange_text = $lagrange_text.Replace("X$($index)", $points_list[$index].x)
+        $lagrange_text = $lagrange_text.Replace("Y$($index)", $points_list[$index].y)
+    }
+    return $lagrange_text
+}
+
+Export-ModuleMember -Function parse_point
+Export-ModuleMember -Function convert_string_to_points
+Export-ModuleMember -Function NOT_WORKING_lagrange_interpolation
+Export-ModuleMember -Function make_lagrange_text
+Export-ModuleMember -Function replace_lagrange_text
+#Export-ModuleMember -Function convert_string_to_points
