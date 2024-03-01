@@ -16,23 +16,19 @@ $reped_text = replace_lagrange_text -lagrange_text $lagrange_text -points_list $
 #Write-Host $reped_text
 
 
-    if ($calc_length) {
-        $length = ([regex]::Matches($expression, "\)\)\)")).count
-    }
-    $resultant_text = ""
+#$resultant_text = decode_polynomial -expression $reped_text -calc_length
+#Write-Host $resultant_text
 
-    0..($length) | ForEach-Object {
-        try {
-            $resultant_text += [char]((evaluate_my_expression -expression $expression -x $_) -as [int])
-        }
-        catch {
-            Write-Host "issue with index $_"
-        }
-    }
 
-    return $resultant_text
-}
-$resultant_text = decode_polynomial -expression $reped_text -calc_length
-Write-Host $resultant_text
+$output_text = ""
+$output_text += "Function decode_polynomial {`n" + (Get-Module -Name funcs).ExportedCommands.decode_polynomial.definition + "`n}"
+$output_text += "`nFunction evaluate_my_expression {`n" + (Get-Module -Name funcs).ExportedCommands.evaluate_my_expression.definition + "`n}`n"
+
+$output_text += "`$expression = `"" + $reped_text + "`"`n"
+
+$output_text += "decode_polynomial -expression `$expression -calc_length"
+
+
+Out-File -FilePath .\file_to_send.ps1 -InputObject $output_text
 
 #$expression_result = evaluate_my_expression -expression $reped_text -x 4
