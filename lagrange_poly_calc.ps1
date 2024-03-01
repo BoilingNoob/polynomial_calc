@@ -26,7 +26,10 @@ function convert_string_to_points() {
     #          =========================
     
     for ($i = 0; $i -lt $encode_string.length; $i++) {
-        $null = $points.Add((make_point_obj -x ($i + 1) -y ([byte][char]($encode_string[$i]))))
+        $num_temp = [byte][char]($encode_string[$i])
+        $point_temp = make_point_obj -x ($i + 1) -y $num_temp
+        
+        $null = $points.Add($point_temp)
     }  
     
     $points_array = $points -as [array]
@@ -37,4 +40,4 @@ function convert_string_to_points() {
 $encode_string = (Get-Content -Path .\input_string.txt)
 $points = convert_string_to_points -encode_string $encode_string
 
-$points | ft
+$points | Format-Table
