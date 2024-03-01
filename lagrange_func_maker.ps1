@@ -13,9 +13,17 @@ $lagrange_text = make_lagrange_text -points_list $points
 
 $reped_text = replace_lagrange_text -lagrange_text $lagrange_text -points_list $points
 
-Write-Host $reped_text
+#Write-Host $reped_text
 
+$resultant_text = ""
+0..40 | % {
+    try {
+        $resultant_text += [char]((evaluate_my_expression -expression $reped_text -x $_) -as [int])
+    }
+    catch {
 
+    }
+}
+Write-Host $resultant_text
 
-
-$expression_result = evaluate_my_expression -expression $reped_text -x 4
+#$expression_result = evaluate_my_expression -expression $reped_text -x 4
